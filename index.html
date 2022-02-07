@@ -1,0 +1,1059 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>reveal.js - Auto Animate</title>
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<link rel="stylesheet" href="../dist/reveal.css">
+		<link rel="stylesheet" href="../dist/theme/black.css" id="theme">
+		<link rel="stylesheet" href="../plugin/highlight/monokai.css">
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<div class="slides">
+			
+			<section data-transition="zoom-in fade-out">
+					<h2>NFT Smart contract</h2>
+					<img src="image1.png" style="height: 300px;">
+				</section>
+				
+				<section data-transition="zoom-in fade-out">
+					<img src="image1.png" style="height: 100px;">
+					<pre data-id="code"><code class="hljs" data-trim>
+						use near_contract_standards::non_fungible_token::metadata::{
+						NFTContractMetadata, NonFungibleTokenMetadataProvider, TokenMetadata, NFT_METADATA_SPEC,
+						};
+						use near_contract_standards::non_fungible_token::NonFungibleToken;
+						use near_contract_standards::non_fungible_token::{Token, TokenId};
+						use near_sdk::borsh::{self, BorshDeserialize, BorshSerialize};
+						use near_sdk::collections::LazyOption;
+						use near_sdk::{
+							env, near_bindgen, require, AccountId, BorshStorageKey, PanicOnDefault, Promise, PromiseOrValue,
+						};
+					</code></pre>
+
+				</section>
+				
+				<section data-transition="zoom-in fade-out">
+
+					<img src="image1.png" style="height: 100px;">
+					<pre data-id="code"><code class="hljs" data-trim>
+						The smart contract start with the imports section,
+						which brings all of the functions needed 
+						to implement this contract from the used crates, 
+						crates in Rust is like libraries in other languages),
+						And you can read more about it from here.
+					</code></pre>
+					<p><a href="https://doc.rust-lang.org/book/ch07-00-managing-growing-projects-with-packages-crates-and-modules.html">Packages and crates!</a></p>
+
+				</section>
+				
+				<section data-transition="zoom-in fade-out">
+					<img src="image1.png" style="height: 100px;">
+					<pre data-id="code"><code class="hljs" data-trim>
+						#[near_bindgen]
+						#[derive(BorshDeserialize, BorshSerialize, PanicOnDefault)]
+						pub struct Contract {
+							tokens: NonFungibleToken,
+							metadata: LazyOption&ltNFTContractMetadata>,
+						}
+					</code></pre>
+				</section>
+				
+				
+				<section data-transition="zoom-in fade-out">
+					<img src="image1.png" style="height: 100px;">
+					<pre data-id="code"><code class="hljs" data-trim>
+						Here we define our custom data type which
+						includes two variables:
+					</code></pre>
+				</section>
+				
+				<section data-transition="zoom-in fade-out">
+					<img src="image1.png" style="height: 100px;">
+					<pre data-id="code"><code class="hljs" data-trim>
+						1-tokens; and it is from the data type (NonFunginbleToken),
+						- this data type is not primitive- this is user defined
+						datatype which we included from the near_contract_standards
+						crate in line 18)
+					</code></pre>
+				</section>
+				
+				<section data-transition="zoom-in fade-out">
+					<img src="image1.png" style="height: 100px;">
+					<pre data-id="code"><code class="hljs" data-trim>
+						2-metadata: it is also a custom data type from type lazy option,
+						it is a persistent lazy option that stores a value in the storage,
+						the stored value is from type NFTContractMetadata,
+						which is a user defined data type.
+					</code></pre>
+				</section>
+			
+				<section data-transition="zoom-in fade-out">
+					<img src="image1.png" style="height: 100px;">
+					<pre data-id="code"><code class="hljs" data-trim>
+						The line before the definition of the struct is called macro,
+						this macro enabled some feature, which is BorshDeserialize,
+						BorshSerialize and PanicOnDefault,The serialization and 
+						deserialization	are provided from a crate (library) 
+						called borsh, and it is	a data-structure that can 
+						be de-serialized from binary format (BorshDeserialize)
+						, or serialized into binary format (BorshSerialize)
+					</code></pre>
+				</section>
+				
+				<section data-transition="zoom-in fade-out">
+					<img src="image1.png" style="height: 100px;">
+					<pre data-id="code"><code class="hljs" data-trim>
+						const DATA_IMAGE_SVG_NEAR_ICON: &str = "";
+
+					</code></pre>
+				</section>
+								
+				<section data-transition="zoom-in fade-out">
+					<img src="image1.png" style="height: 100px;">
+					<pre data-id="code"><code class="hljs" data-trim>
+						here we put a link to near icon
+					</code></pre>
+				</section>
+
+				<section data-transition="zoom-in fade-out">
+					<img src="image1.png" style="height: 100px;">
+					<pre data-id="code"><code class="hljs" data-trim>
+						#[derive(BorshSerialize, BorshStorageKey)]
+						enum StorageKey {
+							NonFungibleToken,
+							Metadata,
+							TokenMetadata,
+							Enumeration,
+							Approval,
+						}					
+						</code></pre>
+				</section>
+				
+				
+				<section data-transition="zoom-in fade-out">
+					<img src="image1.png" style="height: 100px;">
+					<pre data-id="code"><code class="hljs" data-trim>
+						Here we define our enum, if you want to
+						know more about enumeration in rust,
+						check the link below
+						
+						</code></pre>
+						<p><a href="https://doc.rust-lang.org/book/ch06-00-enums.html">Enum in rust!</a></p>
+				</section>
+				
+				<section data-transition="zoom-in fade-out">
+					<img src="image1.png" style="height: 100px;">
+					<pre data-id="code"><code class="hljs" data-trim>
+						#[near_bindgen]
+						impl Contract {
+							..
+							..
+						}
+						here we define implementations on type Contract which
+						we defined in the begining
+						</code></pre>
+				</section>
+				
+				<section data-transition="zoom-in fade-out">
+					<img src="image1.png" style="height: 100px;">
+					<pre data-id="code"><code class="hljs" data-trim>
+						#[init]
+							pub fn new_default_meta(owner_id: AccountId) -> Self {
+								Self::new(
+									owner_id,
+									NFTContractMetadata {
+										spec: NFT_METADATA_SPEC.to_string(),
+										name: "Example NEAR non-fungible token".to_string(),
+										symbol: "EXAMPLE".to_string(),
+										icon: Some(DATA_IMAGE_SVG_NEAR_ICON.to_string()),
+										base_uri: None,
+										reference: None,
+										reference_hash: None,
+									},
+								)
+							}
+							</code></pre>
+				</section>
+				
+				<section data-transition="zoom-in fade-out">
+					<img src="image1.png" style="height: 100px;">
+					<pre data-id="code"><code class="hljs" data-trim>
+						this is the implementation of a function called 
+						new_default_meta, which takes the owner_id which
+						is from a type AccountId (custom type)
+						and initialize our contract with default parameters
+						and return an instance of it
+							</code></pre>
+				</section>
+				
+
+				<section data-transition="zoom-in fade-out">
+					<img src="image1.png" style="height: 100px;">
+					<pre data-id="code"><code class="hljs" data-trim>
+						   pub fn new(owner_id: AccountId, metadata: NFTContractMetadata) -> Self {
+								require!(!env::state_exists(), "Already initialized");
+								metadata.assert_valid();
+								Self {
+									tokens: NonFungibleToken::new(
+										StorageKey::NonFungibleToken,
+										owner_id,
+										Some(StorageKey::TokenMetadata),
+										Some(StorageKey::Enumeration),
+										Some(StorageKey::Approval),
+									),
+									metadata: LazyOption::new(StorageKey::Metadata, Some(&metadata)),
+								}
+							}
+							</code></pre>
+				</section>
+				
+				<section data-transition="zoom-in fade-out">
+					<img src="image1.png" style="height: 100px;">
+					<pre data-id="code"><code class="hljs" data-trim>
+						   in the first line of the implementation, we validate 
+						   that the meta data is valid or not,
+							</code></pre>
+				</section>
+				
+				<section data-transition="zoom-in fade-out">
+					<img src="image1.png" style="height: 100px;">
+					<pre data-id="code"><code class="hljs" data-trim>
+						   in the second line of the implementation, we validate 
+						   that the contract is already initialized or not.
+							</code></pre>
+				</section>
+				
+				<section data-transition="zoom-in fade-out">
+					<img src="image1.png" style="height: 100px;">
+					<pre data-id="code"><code class="hljs" data-trim>
+						   then we create a new instance of the Contract,
+						   with the given account id and meta data.
+							</code></pre>
+				</section>
+				
+				
+				<section data-transition="zoom-in fade-out">
+					<img src="image1.png" style="height: 100px;">
+					<pre data-id="code"><code class="hljs" data-trim>
+						   #[payable]
+									pub fn nft_mint(
+										&mut self,
+										token_id: TokenId,
+										token_owner_id: AccountId,
+										token_metadata: TokenMetadata,
+									) -> Token {
+										assert_eq!(env::predecessor_account_id(), self.tokens.owner_id, "Unauthorized");
+										self.tokens.internal_mint(token_id, token_owner_id, Some(token_metadata))
+									}
+							</code></pre>
+				</section>
+				
+				<section data-transition="zoom-in fade-out">
+					<img src="image1.png" style="height: 100px;">
+					<pre data-id="code"><code class="hljs" data-trim>
+						   Mint a new token with ID=`token_id` belonging to 
+									`token_owner_id`.
+									Since this example implements metadata, it also 
+									requires per-token metadata to be provided	
+									in this call. `self.tokens.
+									mint` will also	require it to be Some, 
+									since `StorageKey::TokenMetadata` was provided 
+									at initialization.
+									`self.tokens.mint` will enforce 
+									`predecessor_account_id` to	equal the 
+									`owner_id` given in initialization call to `new`.
+							</code></pre>
+				</section>
+				
+				<section data-transition="zoom-in fade-out">
+					<img src="image1.png" style="height: 100px;">
+					<pre data-id="code"><code class="hljs" data-trim>
+						  #[near_bindgen]
+								impl NonFungibleTokenMetadataProvider for Contract {
+									fn nft_metadata(&self) -> NFTContractMetadata {
+										self.metadata.get().unwrap()
+									}
+								}
+							</code></pre>
+				</section>
+				
+				<section data-transition="zoom-in fade-out">
+					<img src="image1.png" style="height: 100px;">
+					<pre data-id="code"><code class="hljs" data-trim>
+						  NonFungibleTokenMetadataProvider is a trait, 
+						  you can learn more about traits from the
+						  link below
+							</code></pre>
+							<p><a href="https://doc.rust-lang.org/book/ch10-02-traits.html">Traits in rust!</a></p>
+				</section>
+				
+				<section data-transition="zoom-in fade-out">
+					<img src="image1.png" style="height: 100px;">
+					<pre data-id="code"><code class="hljs" data-trim>
+						  this method takes instance of Contract,
+						  and return its metadata
+							</code></pre>
+				</section>
+				
+				<section data-transition="zoom-in fade-out">
+					<img src="image1.png" style="height: 100px;">
+					<pre data-id="code"><code class="hljs" data-trim>
+						  #[cfg(all(test, not(target_arch = "wasm32")))]
+						  this is called conditional compilation, which means that
+						  whatever after this line might be compiled or not, according
+						  to the condition written, and the condition here is that 
+						  the target_arch not wasm32
+						  if you want to know more about the conditional compilation 
+						  check the link below
+							</code></pre>
+							<p><a href="https://doc.rust-lang.org/reference/conditional-compilation.html">conditional compilation in rust!</a></p>
+				</section>
+				
+				<section data-transition="zoom-in fade-out">
+					<img src="image1.png" style="height: 100px;">
+					<pre data-id="code"><code class="hljs" data-trim>
+							mod tests {
+								..
+								..
+								}
+						  A module is a collection of items: functions, structs, traits, impl blocks, and even other modules.
+							</code></pre>
+							<p><a href="https://doc.rust-lang.org/rust-by-example/mod.html">Modules in rust!</a></p>
+				</section>
+				
+				<section data-transition="zoom-in fade-out">
+					<img src="image1.png" style="height: 100px;">
+					<pre data-id="code"><code class="hljs" data-trim>
+							use near_sdk::test_utils::{accounts, VMContextBuilder};
+							use near_sdk::testing_env;
+							use std::collections::HashMap;
+							</code></pre>
+				</section>
+				
+				<section data-transition="zoom-in fade-out">
+					<img src="image1.png" style="height: 100px;">
+					<pre data-id="code"><code class="hljs" data-trim>
+							those are imports to be used in the test module
+							</code></pre>
+				</section>
+				
+				<section data-transition="zoom-in fade-out">
+					<h3>NFT Smart contract</h3>
+					<img src="image1.png" style="height: 100px;">
+					<pre data-id="code"><code class="hljs" data-trim>
+						use super::*;
+						</code></pre>
+				</section>
+				
+				<section data-transition="zoom-in fade-out">
+					<img src="image1.png" style="height: 100px;">
+					<pre data-id="code"><code class="hljs" data-trim>
+						super keyword enables us to access the parent score,
+						so we don't need to duplicate the implementation
+						of the already implemented function to test them.
+						if you want to know more about the super,
+						check the link below
+						</code></pre>
+						<p><a href="https://doc.rust-lang.org/reference/paths.html#super">super in rust!</a></p>
+				</section>
+				
+				<section data-transition="zoom-in fade-out">
+					<img src="image1.png" style="height: 100px;">
+					<pre data-id="code"><code class="hljs" data-trim>
+						const MINT_STORAGE_COST: u128 = 5870000000000000000000;
+						here we define the cost of the mint storage,
+						</code></pre>
+				</section>
+				
+				<section data-transition="zoom-in fade-out">
+					<img src="image1.png" style="height: 100px;">
+					<pre data-id="code"><code class="hljs" data-trim>
+						fn get_context(predecessor_account_id: AccountId) -> VMContextBuilder {
+						let mut builder = VMContextBuilder::new();
+						builder
+							.current_account_id(accounts(0))
+							.signer_account_id(predecessor_account_id.clone())
+							.predecessor_account_id(predecessor_account_id);
+						builder
+						}
+						</code></pre>
+				</section>
+				
+				<section data-transition="zoom-in fade-out">
+					<img src="image1.png" style="height: 100px;">
+					<pre data-id="code"><code class="hljs" data-trim>
+					When dealing with resources, the default behavior is to
+					transfer them during assignments or function calls.
+					However, sometimes we need to make a copy of the resource as well.
+					The Clone trait helps us do exactly this. Most commonly,
+					we can use the .clone() method defined by the Clone trait.
+					</code></pre>
+				</section>
+				
+				<section data-transition="zoom-in fade-out">
+					<img src="image1.png" style="height: 100px;">
+					<pre data-id="code"><code class="hljs" data-trim>
+						clone is a common trait for the ability to explicitly duplicate an object.
+						</code></pre>
+				</section>
+				
+				<section data-transition="zoom-in fade-out">
+					<img src="image1.png" style="height: 100px;">
+					<pre data-id="code"><code class="hljs" data-trim>
+					fn sample_token_metadata() -> TokenMetadata {
+							TokenMetadata {
+								title: Some("Olympus Mons".into()),
+								description: Some("The tallest mountain in the charted solar system".into()),
+								media: None,
+								media_hash: None,
+								copies: Some(1u64),
+								issued_at: None,
+								expires_at: None,
+								starts_at: None,
+								updated_at: None,
+								extra: None,
+								reference: None,
+								reference_hash: None,
+							}
+						}						
+						</code></pre>
+				</section>
+				
+				<section data-transition="zoom-in fade-out">
+					<img src="image1.png" style="height: 100px;">
+					<pre data-id="code"><code class="hljs" data-trim>
+					this function is used to return a TokenMetadata with 
+					predefined parameters
+					</code></pre>
+				</section>
+				
+				<section data-transition="zoom-in fade-out">
+					<img src="image1.png" style="height: 100px;">
+					<pre data-id="code"><code class="hljs" data-trim>
+					#[test]
+					</code></pre>
+				</section>
+				
+				<section data-transition="zoom-in fade-out">
+					<img src="image1.png" style="height: 100px;">
+					<pre data-id="code"><code class="hljs" data-trim>
+					this attribute indicates this is a test function,
+					so the test runner knows to treat this function as a test.
+					We could also have non-test functions in the tests
+					module to help set up common scenarios or perform
+					common operations, so we need to indicate which functions
+					are tests by using the #[test] attribute.
+					</code></pre>
+				</section>
+				
+				<section data-transition="zoom-in fade-out">
+					<img src="image1.png" style="height: 100px;">
+					<pre data-id="code"><code class="hljs" data-trim>
+					#[test]
+					fn test_new() {
+						let mut context = get_context(accounts(1));
+						testing_env!(context.build());
+						let contract = Contract::new_default_meta(accounts(1).into());
+						testing_env!(context.is_view(true).build());
+						assert_eq!(contract.nft_token("1".to_string()), None);
+					}
+					</code></pre>
+				</section>
+				
+				<section data-transition="zoom-in fade-out">
+					<img src="image1.png" style="height: 100px;">
+					<pre data-id="code"><code class="hljs" data-trim>
+					this is a test case, the #should_panic is a macro,
+					which force the code to panic (stop compiling)
+					if the contract is not initialized.
+					assert_eq!: Asserts that two expressions are 
+					equal to each other
+					The testing_env! macro will initialize the blockchain
+					interface with the VMContext which is either initialized
+					through VMContextBuilder or manually through itself.
+					</code></pre>
+				</section>
+				
+				<section data-transition="zoom-in fade-out">
+					<img src="image1.png" style="height: 100px;">
+					<pre data-id="code"><code class="hljs" data-trim>
+					#[test]
+					#[should_panic(expected = "The contract is not initialized")]
+							fn test_default() {
+								let context = get_context(accounts(1));
+								testing_env!(context.build());
+								let _contract = Contract::default();
+							}		
+					</code></pre>
+				</section>
+				
+				<section data-transition="zoom-in fade-out">
+					<img src="image1.png" style="height: 100px;">
+					<pre data-id="code"><code class="hljs" data-trim>
+					#[test]
+					fn test_mint() {
+						let mut context = get_context(accounts(0));
+						testing_env!(context.build());
+						let mut contract = Contract::new_default_meta(accounts(0).into());
+
+						testing_env!(context
+							.storage_usage(env::storage_usage())
+							.attached_deposit(MINT_STORAGE_COST)
+							.predecessor_account_id(accounts(0))
+							.build());
+
+						let token_id = "0".to_string();
+						let token = contract.nft_mint(token_id.clone(), accounts(0), sample_token_metadata());
+						assert_eq!(token.token_id, token_id);
+						assert_eq!(token.owner_id, accounts(0));
+						assert_eq!(token.metadata.unwrap(), sample_token_metadata());
+						assert_eq!(token.approved_account_ids.unwrap(), HashMap::new());
+					}	
+					</code></pre>
+				</section>
+				
+				<section data-transition="zoom-in fade-out">
+					<img src="image1.png" style="height: 100px;">
+					<pre data-id="code"><code class="hljs" data-trim>
+					#[test]
+					fn test_transfer() {
+						let mut context = get_context(accounts(0));
+						testing_env!(context.build());
+						let mut contract = Contract::new_default_meta(accounts(0).into());
+
+						testing_env!(context
+							.storage_usage(env::storage_usage())
+							.attached_deposit(MINT_STORAGE_COST)
+							.predecessor_account_id(accounts(0))
+							.build());
+						let token_id = "0".to_string();
+						contract.nft_mint(token_id.clone(), accounts(0), sample_token_metadata());
+
+						testing_env!(context
+							.storage_usage(env::storage_usage())
+							.attached_deposit(1)
+							.predecessor_account_id(accounts(0))
+							.build());
+						contract.nft_transfer(accounts(1), token_id.clone(), None, None);
+
+						testing_env!(context
+							.storage_usage(env::storage_usage())
+							.account_balance(env::account_balance())
+							.is_view(true)
+							.attached_deposit(0)
+							.build());
+						if let Some(token) = contract.nft_token(token_id.clone()) {
+							assert_eq!(token.token_id, token_id);
+							assert_eq!(token.owner_id, accounts(1));
+							assert_eq!(token.metadata.unwrap(), sample_token_metadata());
+							assert_eq!(token.approved_account_ids.unwrap(), HashMap::new());
+						} else {
+							panic!("token not correctly created, or not found by nft_token");
+						}
+					}
+					</code></pre>
+				</section>
+				
+				<section data-transition="zoom-in fade-out">
+					<img src="image1.png" style="height: 100px;">
+					<pre data-id="code"><code class="hljs" data-trim>
+					nft_token function return a Option&ltToken>,
+					Type Option represents an optional value: 
+					every Option is either Some and contains a value,
+					or None, and does not. 
+					if you want to know more about option in rust
+					check the link below
+					</code></pre>
+					<p><a href="https://doc.rust-lang.org/std/option/">option in rust!</a></p>						
+				</section>
+				
+				<section data-transition="zoom-in fade-out">
+					<img src="image1.png" style="height: 100px;">
+					<pre data-id="code"><code class="hljs" data-trim>
+					if let Some(token)
+					this mean that if the return value of the function nft_token 
+					is true (some) not (none), assign this value to variable
+					token.
+					if you want to know more about if let check the link below
+					</code></pre>
+					<p><a href="https://doc.rust-lang.org/book/ch06-03-if-let.html">if let in rust!</a></p>					
+				</section>
+				
+				<section data-transition="zoom-in fade-out">
+					<img src="image1.png" style="height: 100px;">
+					<pre data-id="code"><code class="hljs" data-trim>
+					 The function unwrap() is used with option and result types,
+					 will give you the embedded value if there is one (value).
+					 If instead there is not a value (false) it will panic.
+					</code></pre>
+					<p><a href="https://doc.rust-lang.org/book/ch06-03-if-let.html">if let in rust!</a></p>					
+				</section>
+				
+				<section data-transition="zoom-in fade-out">
+					<img src="image1.png" style="height: 100px;">
+					<pre data-id="code"><code class="hljs" data-trim>
+					panic!("token not correctly created, or not found by nft_token");
+					This allows a program to terminate immediately and provide feedback
+					to the caller of the program
+					if you want to know more about panic! check the link below
+					</code></pre>
+					<p><a href="https://doc.rust-lang.org/book/ch09-03-to-panic-or-not-to-panic.html">panic! in rust!</a></p>					
+				</section>
+				
+				<section data-transition="zoom-in fade-out">
+					<img src="image1.png" style="height: 100px;">
+					<pre data-id="code"><code class="hljs" data-trim>
+					#[test]
+					fn test_approve() {
+						let mut context = get_context(accounts(0));
+						testing_env!(context.build());
+						let mut contract = Contract::new_default_meta(accounts(0).into());
+
+						testing_env!(context
+							.storage_usage(env::storage_usage())
+							.attached_deposit(MINT_STORAGE_COST)
+							.predecessor_account_id(accounts(0))
+							.build());
+						let token_id = "0".to_string();
+						contract.nft_mint(token_id.clone(), accounts(0), sample_token_metadata());
+
+						// alice approves bob
+						testing_env!(context
+							.storage_usage(env::storage_usage())
+							.attached_deposit(150000000000000000000)
+							.predecessor_account_id(accounts(0))
+							.build());
+						contract.nft_approve(token_id.clone(), accounts(1), None);
+
+						testing_env!(context
+							.storage_usage(env::storage_usage())
+							.account_balance(env::account_balance())
+							.is_view(true)
+							.attached_deposit(0)
+							.build());
+						assert!(contract.nft_is_approved(token_id.clone(), accounts(1), Some(1)));
+					}
+					</code></pre>
+				</section>
+				
+				<section data-transition="zoom-in fade-out">
+					<img src="image1.png" style="height: 100px;">
+					<pre data-id="code"><code class="hljs" data-trim>
+					#[test]
+					fn test_revoke() {
+						let mut context = get_context(accounts(0));
+						testing_env!(context.build());
+						let mut contract = Contract::new_default_meta(accounts(0).into());
+
+						testing_env!(context
+							.storage_usage(env::storage_usage())
+							.attached_deposit(MINT_STORAGE_COST)
+							.predecessor_account_id(accounts(0))
+							.build());
+						let token_id = "0".to_string();
+						contract.nft_mint(token_id.clone(), accounts(0), sample_token_metadata());
+
+						// alice approves bob
+						testing_env!(context
+							.storage_usage(env::storage_usage())
+							.attached_deposit(150000000000000000000)
+							.predecessor_account_id(accounts(0))
+							.build());
+						contract.nft_approve(token_id.clone(), accounts(1), None);
+
+						// alice revokes bob
+						testing_env!(context
+							.storage_usage(env::storage_usage())
+							.attached_deposit(1)
+							.predecessor_account_id(accounts(0))
+							.build());
+						contract.nft_revoke(token_id.clone(), accounts(1));
+						testing_env!(context
+							.storage_usage(env::storage_usage())
+							.account_balance(env::account_balance())
+							.is_view(true)
+							.attached_deposit(0)
+							.build());
+						assert!(!contract.nft_is_approved(token_id.clone(), accounts(1), None));
+					}
+					</code></pre>
+				</section>
+				
+				<section data-transition="zoom-in fade-out">
+					<img src="image1.png" style="height: 100px;">
+					<pre data-id="code"><code class="hljs" data-trim>
+					#[test]
+					fn test_revoke_all() {
+						let mut context = get_context(accounts(0));
+						testing_env!(context.build());
+						let mut contract = Contract::new_default_meta(accounts(0).into());
+
+						testing_env!(context
+							.storage_usage(env::storage_usage())
+							.attached_deposit(MINT_STORAGE_COST)
+							.predecessor_account_id(accounts(0))
+							.build());
+						let token_id = "0".to_string();
+						contract.nft_mint(token_id.clone(), accounts(0), sample_token_metadata());
+
+						// alice approves bob
+						testing_env!(context
+							.storage_usage(env::storage_usage())
+							.attached_deposit(150000000000000000000)
+							.predecessor_account_id(accounts(0))
+							.build());
+						contract.nft_approve(token_id.clone(), accounts(1), None);
+
+						// alice revokes bob
+						testing_env!(context
+							.storage_usage(env::storage_usage())
+							.attached_deposit(1)
+							.predecessor_account_id(accounts(0))
+							.build());
+						contract.nft_revoke_all(token_id.clone());
+						testing_env!(context
+							.storage_usage(env::storage_usage())
+							.account_balance(env::account_balance())
+							.is_view(true)
+							.attached_deposit(0)
+							.build());
+						assert!(!contract.nft_is_approved(token_id.clone(), accounts(1), Some(1)));
+					}
+					</code></pre>
+				</section>
+				
+				<section data-transition="zoom-in fade-out">
+					<img src="image1.png" style="height: 100px;">
+					<pre data-id="code"><code class="hljs" data-trim>
+						  you can find the link of this smart contract 
+						  from the link below
+							</code></pre>
+							<p><a href="https://github.com/near/near-sdk-rs/blob/master/examples/non-fungible-token/nft/src/lib.rs">NFT smart contract!</a></p>
+				</section>
+				
+				<section data-transition="zoom-in fade-out">
+					<h4>cross-contract-high-level Smart contract</h4>
+					<img src="image1.png" style="height: 300px;">
+				</section>
+				
+				<section data-transition="zoom-in fade-out">
+					<img src="image1.png" style="height: 100px;">
+					<pre data-id="code"><code class="hljs" data-trim>
+					use near_sdk::borsh::{self, BorshDeserialize, BorshSerialize};
+					use near_sdk::{
+						env,
+						ext_contract,
+						json_types::U128,
+						log,
+						near_bindgen,
+						AccountId,
+						Promise,
+						PromiseOrValue,
+					};
+					</code></pre>
+				</section>
+				
+				<section data-transition="zoom-in fade-out">
+					<img src="image1.png" style="height: 100px;">
+					<pre data-id="code"><code class="hljs" data-trim>
+					code starts with the imports section,
+					where we declare the elements we want to use
+					in this file.
+					</code></pre>
+				</section>
+				
+				<section data-transition="zoom-in fade-out">
+					<img src="image1.png" style="height: 100px;">
+					<pre data-id="code"><code class="hljs" data-trim>
+					#[near_bindgen]
+					#[derive(Default, BorshDeserialize, BorshSerialize)]
+					pub struct CrossContract {}
+					</code></pre>
+				</section>
+				
+				<section data-transition="zoom-in fade-out">
+					<img src="image1.png" style="height: 100px;">
+					<pre data-id="code"><code class="hljs" data-trim>
+					here we define out custom data type (CrossContract)
+					and it is empty.
+					</code></pre>
+				</section>
+				
+				<section data-transition="zoom-in fade-out">
+					<img src="image1.png" style="height: 100px;">
+					<pre data-id="code"><code class="hljs" data-trim>
+					#[ext_contract(ext)]
+					pub trait ExtCrossContract {
+						fn merge_sort(&self, arr: Vec<u8>) -> PromiseOrValue<Vec<u8>>;
+						fn merge(
+							&self,
+							#[callback_unwrap]
+							#[serializer(borsh)]
+							data0: Vec<u8>,
+							#[callback_unwrap]
+							#[serializer(borsh)]
+							data1: Vec<u8>,
+						) -> Vec<u8>;
+					}
+					</code></pre>
+				</section>
+				
+				<section data-transition="zoom-in fade-out">
+					<img src="image1.png" style="height: 100px;">
+					<pre data-id="code"><code class="hljs" data-trim>
+					#[ext_contract(ext)]
+					 It takes a Rust Trait and converts it to a module
+					 with static methods. Each of these static methods
+					 takes positional arguments defined by the Trait
+					</code></pre>
+				</section>
+				
+				<section data-transition="zoom-in fade-out">
+					<img src="image1.png" style="height: 100px;">
+					<pre data-id="code"><code class="hljs" data-trim>
+					// If the name is not provided, the namespace 
+					//for generated methods in derived by applying snake
+					// case to the trait name, e.g. ext_status_message.
+					#[ext_contract]
+					pub trait ExtStatusMessage {
+						fn set_status(&mut self, message: String);
+						fn get_status(&self, account_id: AccountId) -> Option<String>;
+					}
+					</code></pre>
+				</section>
+				
+				<section data-transition="zoom-in fade-out">
+					<img src="image1.png" style="height: 100px;">
+					<pre data-id="code"><code class="hljs" data-trim>
+					variables in rust are read only by default, you
+					cannot assign a value to them, if you want to make it
+					read-write, you should put (mut) before the name of the variable.
+					here we put mut self because we will make changes
+					to the variable.
+					</code></pre>
+				</section>
+				
+				<section data-transition="zoom-in fade-out">
+					<img src="image1.png" style="height: 100px;">
+					<pre data-id="code"><code class="hljs" data-trim>
+					so set_status function takes mut variable to be able to set it,
+					and get_status takes a variable not mutted so it can read it only.
+					</code></pre>
+				</section>
+				
+				<section data-transition="zoom-in fade-out">
+					<img src="image1.png" style="height: 100px;">
+					<pre data-id="code"><code class="hljs" data-trim>
+					#[near_bindgen]
+					impl CrossContract {
+					..
+					..
+					}
+					</code></pre>
+				</section>
+				
+				<section data-transition="zoom-in fade-out">
+					<img src="image1.png" style="height: 100px;">
+					<pre data-id="code"><code class="hljs" data-trim>
+					pub fn deploy_status_message(&self, account_id: AccountId, amount: U128) {
+						Promise::new(account_id)
+							.create_account()
+							.transfer(amount.0)
+							.add_full_access_key(env::signer_account_pk())
+							.deploy_contract(
+								include_bytes!("../../status-message/res/status_message.wasm").to_vec(),
+							);
+					}
+					</code></pre>
+				</section>
+				
+				<section data-transition="zoom-in fade-out">
+					<img src="image1.png" style="height: 100px;">
+					<pre data-id="code"><code class="hljs" data-trim>
+					#[result_serializer(borsh)]
+					pub fn merge_sort(&self, arr: Vec<u8>) -> PromiseOrValue<Vec<u8>> {
+						if arr.len() <= 1 {
+							return PromiseOrValue::Value(arr);
+						}
+						let pivot = arr.len() / 2;
+						let arr0 = arr[..pivot].to_vec();
+						let arr1 = arr[pivot..].to_vec();
+						let prepaid_gas = env::prepaid_gas();
+						let account_id = env::current_account_id();
+
+						ext::merge_sort(arr0, account_id.clone(), 0, prepaid_gas / 4)
+							.and(ext::merge_sort(arr1, account_id.clone(), 0, prepaid_gas / 4))
+							.then(ext::merge(account_id, 0, prepaid_gas / 4))
+							.into()
+					}
+					</code></pre>
+				</section>
+				
+				<section data-transition="zoom-in fade-out">
+					<img src="image1.png" style="height: 100px;">
+					<pre data-id="code"><code class="hljs" data-trim>
+					#[result_serializer(borsh)]
+					the result_serializer(borsh) annotation will override
+					the default result serialization protocol from JSON
+					to borsh and the serializer(borsh) annotations will
+					override the parameter serialization.
+					if you want to know more about it check the link below.
+					</code></pre>
+					<p><a href="https://www.near-sdk.io/contract-interface/serialization-interface">Serialization Protocols!</a></p>
+				</section>
+				
+				<section data-transition="zoom-in fade-out">
+					<img src="image1.png" style="height: 100px;">
+					<pre data-id="code"><code class="hljs" data-trim>
+					let pivot = arr.len() / 2;
+					let arr0 = arr[..pivot].to_vec();
+					let arr1 = arr[pivot..].to_vec(); 
+					here he divided the array into 2, arr0 will be take the 
+					values from the first to the pivot (the half of the array)
+					and the arr1 will take from the half to the very end.
+					</code></pre>
+					</section>
+					
+				<section data-transition="zoom-in fade-out">
+					<img src="image1.png" style="height: 100px;">
+					<pre data-id="code"><code class="hljs" data-trim>
+					fn internal_merge(&self, arr0: Vec<u8>, arr1: Vec<u8>) -> Vec<u8> {
+					let mut i = 0usize;
+					let mut j = 0usize;
+					let mut result = vec![];
+					loop {
+						if i == arr0.len() {
+							result.extend(&arr1[j..]);
+							break;
+						}
+						if j == arr1.len() {
+							result.extend(&arr0[i..]);
+							break;
+						}
+						if arr0[i] < arr1[j] {
+							result.push(arr0[i]);
+							i += 1;
+						} else {
+							result.push(arr1[j]);
+							j += 1;
+						}
+					}
+					result
+				}
+				</code></pre>
+				</section>
+				
+				<section data-transition="zoom-in fade-out">
+					<img src="image1.png" style="height: 100px;">
+					<pre data-id="code"><code class="hljs" data-trim>
+					let mut i = 0usize;
+					i will be 0, and cannot be negative as it is usize.
+					</code></pre>
+				</section>
+				
+				<section data-transition="zoom-in fade-out">
+					<img src="image1.png" style="height: 100px;">
+					<pre data-id="code"><code class="hljs" data-trim>
+					/// Used for callbacks only. Merges two sorted arrays into one. Panics if it is not called by
+					/// the contract itself.
+					#[result_serializer(borsh)]
+					#[private]
+					pub fn merge(
+						&self,
+						#[callback_unwrap]
+						#[serializer(borsh)]
+						data0: Vec<u8>,
+						#[callback_unwrap]
+						#[serializer(borsh)]
+						data1: Vec<u8>,
+					) -> Vec<u8> {
+						log!("Received {:?} and {:?}", data0, data1);
+						let result = self.internal_merge(data0, data1);
+						log!("Merged {:?}", result.clone());
+						result
+					}
+					</code></pre>
+				</section>
+				
+				<section data-transition="zoom-in fade-out">
+					<img src="image1.png" style="height: 100px;">
+					<pre data-id="code"><code class="hljs" data-trim>
+					#[private]
+					the private macro makes this function is able 
+					to be accessed through this scope only.
+					</code></pre>
+				</section>
+				
+				<section data-transition="zoom-in fade-out">
+					<img src="image1.png" style="height: 100px;">
+					<pre data-id="code"><code class="hljs" data-trim>
+					pub fn simple_call(&mut self, account_id: AccountId, message: String) {
+						ext_status_message::set_status(message, account_id, 0, env::prepaid_gas() / 2);
+					}
+					</code></pre>
+				</section>
+				
+				<section data-transition="zoom-in fade-out">
+					<img src="image1.png" style="height: 100px;">
+					<pre data-id="code"><code class="hljs" data-trim>
+					pub fn complex_call(&mut self, account_id: AccountId, message: String) -> Promise {
+						// 1) call status_message to record a message from the signer.
+						// 2) call status_message to retrieve the message of the signer.
+						// 3) return that message as its own result.
+						// Note, for a contract to simply call another contract (1) is sufficient.
+						let prepaid_gas = env::prepaid_gas();
+						log!("complex_call");
+						ext_status_message::set_status(message, account_id.clone(), 0, prepaid_gas / 3).then(
+							ext_status_message::get_status(
+								env::signer_account_id(),
+								account_id,
+								0,
+								prepaid_gas / 3,
+							),
+						)
+					}
+					</code></pre>
+				</section>
+				
+				<section data-transition="zoom-in fade-out">
+					<img src="image1.png" style="height: 100px;">
+					<pre data-id="code"><code class="hljs" data-trim>
+					pub fn transfer_money(&mut self, account_id: AccountId, amount: u64) {
+						Promise::new(account_id).transfer(amount as u128);
+					}
+					</code></pre>
+				</section>
+				
+				<section data-transition="zoom-in fade-out">
+					<img src="image1.png" style="height: 100px;">
+					<pre data-id="code"><code class="hljs" data-trim>
+					here is a link of the code
+					</code></pre>
+					<p><a href="https://github.com/near/near-sdk-rs/blob/master/examples/cross-contract-high-level/src/lib.rs">cross-contract-high-level smart contract!</a></p>
+				</section>
+			</div>
+		</div>
+		
+				<script src="../dist/reveal.js"></script>
+		<script src="../plugin/highlight/highlight.js"></script>
+		<script>
+			Reveal.initialize({
+				center: true,
+				hash: true,
+				plugins: [ RevealHighlight ]
+			});
+		</script>
+		
+		
+		
+	</body>
+</html>
